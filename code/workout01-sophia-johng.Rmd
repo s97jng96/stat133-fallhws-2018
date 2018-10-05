@@ -1,0 +1,80 @@
+---
+title: "workout01-sophia-johng"
+author: "Sophia Johng"
+date: "October 4, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Installing ggplot2 package
+```{r}
+library(ggplot2)
+library(readr)
+library(dplyr)
+```
+
+## Ranking of Teams 
+
+#### Ranking by Salary
+```{r}
+teams <- read.csv("../data/nba2018-teams.csv")
+teams <- arrange(teams,desc(teams$salary))
+
+ggplot(teams,aes(x= reorder(team,salary),y=salary)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  geom_hline(yintercept = sum(teams$salary)/length(teams$salary),color = "pink", size = 1.5) +
+  labs(x = "Team",y = "Salary (in millions)",title = "NBA Teams ranked by Total Salary")
+```
+
+#### Ranking by Total Points 
+```{r}
+teams <- arrange(teams,desc(teams$points)) 
+
+ggplot(teams,aes(x=reorder(team,points),y=points)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  geom_hline(yintercept = sum(teams$points)/length(teams$points), color = "purple", size = 1.5) +
+  labs(x = "Team", y = "Total points", title = "NBA Teams ranked by Total Points")
+```
+
+#### Ranking by Efficiency
+```{r}
+teams <- arrange(teams,desc(teams$efficiency)) 
+
+ggplot(teams,aes(x=reorder(team,efficiency),y=efficiency)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  geom_hline(yintercept = sum(teams$efficiency)/length(teams$efficiency),color = "blue", size = 1.5) +
+  labs(x = "Team",y = "Efficiency",title = "NBA Teams ranked by Effiency")
+```
+
+#### Ranking by Percentage of 3-Pointers as a measure of Shooting skill
+
+* This index would, theoretically, measure a team's shooting skills. As 3-pointers are typically more difficult to make than the other shots, the team that has a larger percentage of 3-pointers out of total scored points should theoretically players that are better shooters.
+
+```{r}
+points3_percent <- ((teams$points3/teams$points) * 100)
+teams <- mutate(teams,points3_percent)
+
+teams <- arrange(teams,desc(teams$points3_percent))
+
+ggplot(teams,aes(x=reorder(team,points3_percent),y=points3_percent)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  geom_hline(yintercept = sum(teams$points3_percent)/length(teams$points3_percent),color = "green", size = 1.5) +
+  labs(x = "Team",y = "Percentage of 3-Pointers out of Total Points Scored",title = "NBA Teams ranked by Percentage of 3-Pointers")
+```
+
+
+## Comments and Reflections 
+
+* This was my first time working on a project with such a file stucture. I feel pretty good about it; I definitely understand the reasoning of having such a file structure.
+* This was not my first time using relative paths. 
+* This was not my first tiem using R scipt.
+* I thought creating the teams data frame was difficult. It took a bit to figure out the correct syntax and commands. I thought creating the .txt and .csv files was relatively simple.
+* I did this assignment on my own. It took me about 3 hours to complete. The most time consuming part was creating the bar graphs. 
+`
